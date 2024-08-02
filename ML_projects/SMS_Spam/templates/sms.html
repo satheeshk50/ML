@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Prediction App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .form-control, .btn-primary {
+            border-radius: 8px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #2c2c2c;
+            border: 1px solid #4a4a4a;
+            width: 100%;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4 text-center">SMS spam Prediction App</h1>
+        <form id="form">
+            <div class="form-group">
+                <textarea class="form-control" rows="5" placeholder="Enter your text here..." id="smsInput" name="sms" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Predict</button>
+        </form>
+        <div class="result-box" id="result">
+            <h4>Prediction Result</h4>
+            <p id="prediction">This will display the prediction result.</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting via the browser
+            const Data = new FormData(this);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: Data
+            })
+            .then(response => response.json())
+            .then(response => {
+                document.getElementById('prediction').textContent = response.msg;
+                document.getElementById('result').style.display = 'block'; // Show the result box
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
+
+<!-- $('#predictionForm').on('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting via the browser
+    const inputText = $('#smsInput').val();
+
+    $.ajax({
+        type: 'POST',
+        url: '/predict',
+        data: { sms: inputText },
+        success: function(response) {
+            $('#predictionText').text(response.msg);
+            $('#result').show(); // Show the result box
+        },
+        error: function(error) {
+            console.error('Error:', error);
+        }
+    });
+}); -->
